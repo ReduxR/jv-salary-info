@@ -5,6 +5,15 @@ import java.time.LocalDate;
 public class SalaryInfo {
     private static final DateUtils util = new DateUtils();
 
+    private int getNameIndex(String[] names, String name) {
+        for (int i = 0; i < names.length; i++) {
+            if (names[i].equals(name)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public String getSalaryInfo(String[] names, String[] data, String dateFrom, String dateTo) {
         StringBuilder builder = new StringBuilder();
         LocalDate from = util.convertString(dateFrom);
@@ -17,29 +26,30 @@ public class SalaryInfo {
                 .append(to.format(util.getFormatter()))
                 .append(System.lineSeparator());
 
-        for (String filteredEntry : data) {
-            Entry entry = new Entry(filteredEntry);
-            if (!entry.getDate().isBefore(from) && !entry.getDate().isAfter(to)) {
-                for (int j = 0; j < names.length; j++) {
-                    if (entry.getName().equals(names[j])) {
-                        salaries[j] += entry.getSalary() * entry.getHours();
-                    }
+        for (String line : data) {
+            Entry entry = new Entry(line);
+
+            if (!entry.getDate().isBefore(from)
+                    && !entry.getDate().isAfter(to)) {
+
+                int index = getNameIndex(names, entry.getName());
+
+                if (index != -1) {
+                    salaries[index] += entry.getSalary() * entry.getHours();
                 }
             }
         }
 
         for (int i = 0; i < names.length; i++) {
+            builder.append(names[i])
+                    .append(" - ")
+                    .append(salaries[i]);
+
             if (i < names.length - 1) {
-                builder.append(names[i])
-                        .append(" - ")
-                        .append(salaries[i])
-                        .append(System.lineSeparator());
-            } else {
-                builder.append(names[i])
-                        .append(" - ")
-                        .append(salaries[i]);
+                builder.append(System.lineSeparator());
             }
         }
+
         return builder.toString();
     }
 }

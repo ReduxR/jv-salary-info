@@ -4,6 +4,10 @@ import java.time.LocalDate;
 
 public class Entry {
     private static final DateUtils utils = new DateUtils();
+    private static final int DATE_INDEX = 0;
+    private static final int NAME_INDEX = 1;
+    private static final int HOURS_INDEX = 2;
+    private static final int SALARY_INDEX = 3;
 
     private final LocalDate date;
     private final String name;
@@ -12,10 +16,10 @@ public class Entry {
 
     public Entry(String line) {
         String[] parts = line.split(" ");
-        this.date = utils.convertString(parts[0]);
-        this.name = parts[1];
-        this.hours = Integer.parseInt(parts[2]);
-        this.salary = Integer.parseInt(parts[3]);
+        this.date = utils.convertString(parts[DATE_INDEX]);
+        this.name = parts[NAME_INDEX];
+        this.hours = Integer.parseInt(parts[HOURS_INDEX]);
+        this.salary = Integer.parseInt(parts[SALARY_INDEX]);
     }
 
     public LocalDate getDate() {
